@@ -1,0 +1,29 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0;background:#0d0d0d}
+.c{width:var(--w);height:var(--h);position:relative;overflow:hidden;background:#0d0d0d;color:#e0e0e0;font-family:"Segoe UI",system-ui,sans-serif}
+.c::before{content:"";position:absolute;inset:-30% -10% auto;height:120%;background:radial-gradient(closest-side,rgba(0,255,200,.16),transparent 70%)}
+.in{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:0 7%}
+.k{font:700 calc(var(--s)*15px)/1 Consolas,monospace;letter-spacing:.16em;color:#00ffc8}
+h1{font-size:calc(var(--s)*86px);line-height:1.02;margin:.25em 0 .2em;font-weight:800;letter-spacing:-.02em}
+h1 em{font-style:normal;color:#00ffc8;text-shadow:0 0 30px rgba(0,255,200,.4)}
+p{font-size:calc(var(--s)*26px);color:#a0a0a0;margin:0;max-width:80%}
+kbd{font:700 .9em/1 Consolas,monospace;padding:.1em .35em;border-radius:.2em;background:#222;border:1px solid #3a3a3a;border-bottom-width:3px;color:#fff}
+.pill{display:inline-flex;align-items:center;gap:.6em;margin-top:1.4em;padding:.6em 1em;border-radius:999px;background:#141414;border:1px solid #2a2a2a;font:700 calc(var(--s)*16px)/1 Consolas,monospace;letter-spacing:.1em;color:#a0a0a0;align-self:flex-start}
+.dot{width:.75em;height:.75em;border-radius:50%;background:#ff0055;box-shadow:0 0 12px #ff0055}
+.mic{position:absolute;right:6%;top:50%;transform:translateY(-50%);width:calc(var(--s)*260px);opacity:.95}
+.sq .in{align-items:center;text-align:center;padding:0}
+.sq .mic{position:static;transform:none;width:46%;margin-bottom:6%}
+.sq h1{font-size:calc(var(--s)*64px);margin:0}
+</style></head><body>
+<div class="c" id="card"><div class="in">
+  <svg class="mic" viewBox="0 0 32 32"><rect x="11" y="3" width="10" height="17" rx="5" fill="none" stroke="#00ffc8" stroke-width="1.6"/><path d="M6 15a10 10 0 0 0 20 0M16 25v4M11 29h10" fill="none" stroke="#00ffc8" stroke-width="1.6" stroke-linecap="round"/></svg>
+  <div class="k">WHISPERWRITER &middot; WINDOWS</div>
+  <h1>Talk, and it <em>types.</em></h1>
+  <p>Hold <kbd>F4</kbd>, speak, let go. Runs on your own PC. Indian English + Hinglish.</p>
+  <div class="pill"><span class="dot"></span>LISTENING</div>
+</div></div>
+<script>
+const q=new URLSearchParams(location.search), w=+q.get('w')||1200, h=+q.get('h')||630, c=document.getElementById('card');
+c.style.setProperty('--w',w+'px');c.style.setProperty('--h',h+'px');c.style.setProperty('--s',Math.min(w/1200,h/630));
+if(q.get('sq')){c.classList.add('sq');c.querySelector('.in').innerHTML=c.querySelector('.mic').outerHTML+'<h1>Whisper<em>Writer</em></h1>';c.style.setProperty('--s',w/600);}
+</script></body></html>

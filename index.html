@@ -1,0 +1,348 @@
+<!doctype html>
+<!-- (c) 2026 Devashish Tiwari (iydebu). https://iydebu.com -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>WhisperWriter - talk, and it types (Windows speech to text)</title>
+<link rel="canonical" href="https://whisperwriter.iydebu.com/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0d0d0d">
+<meta name="author" content="Devashish Tiwari (iydebu)">
+<meta name="description" content="WhisperWriter: hold F4, speak, and your words are typed into any Windows app. Runs on your own PC, fast on NVIDIA GPUs, made for Indian English and Hinglish. Code free on GitHub.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="WhisperWriter">
+<meta property="og:title" content="WhisperWriter - talk, and it types">
+<meta property="og:description" content="Hold F4, speak, let go. Your words appear in any Windows app. Runs on your own PC. Indian English + Hinglish.">
+<meta property="og:url" content="https://whisperwriter.iydebu.com/">
+<meta property="og:image" content="https://whisperwriter.iydebu.com/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://whisperwriter.iydebu.com/og.png">
+<style>
+:root{
+  --bg:#0d0d0d; --bg2:#141414; --surface:#1a1a1a; --line:#262626;
+  --neon:#00ffc8; --neon-dim:#00d9ae; --blue:#00d9ff; --red:#ff0055;
+  --text:#e0e0e0; --text2:#a0a0a0; --muted:#6a6a6a;
+  --mono:"Cascadia Code","JetBrains Mono",Consolas,ui-monospace,monospace;
+  --sans:"Segoe UI",system-ui,-apple-system,sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:17px/1.65 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--neon)}
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+.kicker{font:600 12.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--neon)}
+h1,h2,h3{margin:0;line-height:1.1;letter-spacing:-.01em}
+h2{font-size:clamp(28px,4vw,40px);margin:12px 0 14px}
+section{padding:88px 0;border-top:1px solid var(--line)}
+.lead{color:var(--text2);max-width:640px;margin:0}
+
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 24px;border-radius:10px;font:700 15px/1 var(--mono);
+  letter-spacing:.06em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:transform .2s var(--ease),box-shadow .2s,background .2s}
+.btn:active{transform:scale(.97)}
+.btn-main{background:var(--neon);color:#00140f;box-shadow:0 0 0 0 rgba(0,255,200,.5)}
+.btn-main:hover{box-shadow:0 0 28px rgba(0,255,200,.45);transform:translateY(-2px)}
+.btn-ghost{color:var(--text);border:1.5px solid #3a3a3a;background:transparent}
+.btn-ghost:hover{border-color:var(--neon);color:var(--neon)}
+.btn small{font:500 12px/1 var(--sans);letter-spacing:0;text-transform:none;opacity:.8}
+
+/* nav */
+nav{position:sticky;top:0;z-index:5;background:rgba(13,13,13,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:20px;height:60px}
+.logo{display:flex;align-items:center;gap:10px;font:800 16px/1 var(--mono);letter-spacing:.12em;color:var(--neon);text-decoration:none}
+.logo svg{width:26px;height:26px}
+nav .links{margin-left:auto;display:flex;gap:22px;align-items:center}
+nav .links a{color:var(--text2);text-decoration:none;font-size:14.5px}
+nav .links a:hover{color:var(--neon)}
+nav .links a.btn-main,nav .links a.btn-main:hover{color:#00140f}
+nav .links .btn{padding:10px 16px;font-size:13px}
+@media(max-width:720px){nav .links a:not(.btn){display:none}}
+
+/* hero */
+.hero{padding:84px 0 70px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:-40% -20% auto;height:640px;
+  background:radial-gradient(closest-side,rgba(0,255,200,.12),transparent 70%);pointer-events:none}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;position:relative}
+.hero h1{font-size:clamp(40px,6.4vw,72px);font-weight:800;margin:16px 0 18px}
+.hero h1 em{font-style:normal;color:var(--neon);text-shadow:0 0 28px rgba(0,255,200,.35)}
+.hero .lead{font-size:19px}
+.cta{display:flex;flex-wrap:wrap;gap:14px;margin:30px 0 16px}
+.fine{color:var(--muted);font-size:14px;margin:0}
+@media(max-width:900px){.hero .wrap{grid-template-columns:1fr}}
+
+/* demo window */
+.demo{background:var(--bg2);border:1px solid #2a2a2a;border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.55),0 0 0 1px rgba(0,255,200,.06);overflow:hidden}
+.demo .bar{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line);font:600 12px/1 var(--mono);color:var(--muted)}
+.demo .bar i{width:10px;height:10px;border-radius:50%;background:#333}
+.demo .bar span{margin-left:8px}
+.demo .doc{padding:22px 22px 26px;min-height:190px;font:16px/1.7 var(--sans);color:var(--text)}
+.demo .doc .who{color:var(--muted);font-size:13px;margin-bottom:8px}
+.caret{display:inline-block;width:2px;height:1.1em;background:var(--neon);vertical-align:-3px;margin-left:1px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.pill{display:flex;align-items:center;gap:12px;margin:0 22px 22px;padding:10px 14px;border-radius:999px;background:#0a0a0a;border:1px solid #2a2a2a;font:600 12.5px/1 var(--mono);letter-spacing:.08em;color:var(--text2)}
+.pill .dot{width:10px;height:10px;border-radius:50%;background:var(--muted)}
+.pill.rec .dot{background:var(--red);box-shadow:0 0 12px var(--red);animation:pulse 1.2s ease-in-out infinite}
+.pill.work .dot{background:var(--blue);box-shadow:0 0 12px var(--blue)}
+@keyframes pulse{50%{transform:scale(1.35)}}
+.wave{display:flex;gap:3px;align-items:center;height:16px;margin-left:auto}
+.wave b{width:3px;border-radius:2px;background:var(--neon);height:4px;transition:height .12s}
+kbd{font:700 13px/1 var(--mono);padding:5px 8px;border-radius:6px;background:#222;border:1px solid #3a3a3a;border-bottom-width:3px;color:var(--text)}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:36px}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:24px}
+.card .n{font:700 13px/1 var(--mono);color:var(--neon);letter-spacing:.1em}
+.card h3{font-size:20px;margin:12px 0 8px}
+.card p{margin:0;color:var(--text2);font-size:15.5px}
+@media(max-width:820px){.steps{grid-template-columns:1fr}}
+
+/* features */
+.feats{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:36px}
+.feat{display:flex;gap:16px;padding:22px;border-radius:14px;background:var(--bg2);border:1px solid var(--line)}
+.feat .ic{flex:0 0 40px;height:40px;border-radius:10px;display:grid;place-items:center;background:rgba(0,255,200,.08);color:var(--neon);font:700 16px/1 var(--mono)}
+.feat h3{font-size:17.5px;margin:2px 0 6px}
+.feat p{margin:0;color:var(--text2);font-size:15px}
+@media(max-width:820px){.feats{grid-template-columns:1fr}}
+
+/* modes table */
+.modes{width:100%;border-collapse:collapse;margin-top:30px;font-size:15.5px}
+.modes th,.modes td{text-align:left;padding:14px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.modes th{font:600 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.modes td:first-child{font-family:var(--mono);color:var(--neon);white-space:nowrap}
+.modes td i{color:var(--text2)}
+
+/* get it */
+.get{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;margin-top:36px}
+.box{border-radius:16px;padding:30px;background:var(--bg2);border:1px solid var(--line)}
+.box.main{border-color:rgba(0,255,200,.45);box-shadow:0 0 40px rgba(0,255,200,.08) inset}
+.box h3{font-size:24px;margin:10px 0 8px}
+.price{font:800 40px/1 var(--mono);color:var(--neon);margin:16px 0 4px}
+.price small{font:500 15px/1 var(--sans);color:var(--text2)}
+.box ul{margin:18px 0 24px;padding-left:20px;color:var(--text2)}
+.box ul li{margin:6px 0}
+.box .btn{width:100%;justify-content:center}
+.pay{margin:14px 0 0;color:var(--muted);font-size:13.5px;text-align:center}
+@media(max-width:820px){.get{grid-template-columns:1fr}}
+.needs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px}
+.needs div{padding:16px;border-radius:12px;background:var(--bg2);border:1px solid var(--line);font-size:14.5px;color:var(--text2)}
+.needs b{display:block;color:var(--text);font-size:15px;margin-bottom:2px}
+@media(max-width:820px){.needs{grid-template-columns:repeat(2,1fr)}}
+
+/* faq + policies */
+details{border-bottom:1px solid var(--line);padding:16px 0}
+summary{cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:20px}
+summary::after{content:"+";font:700 20px/1 var(--mono);color:var(--neon)}
+details[open] summary::after{content:"-"}
+details p{color:var(--text2);margin:10px 0 0;max-width:760px}
+.policies{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:30px}
+.policies .card h3{font-size:17px}
+.policies .card p{font-size:14.5px}
+.policies .card p+p{margin-top:8px}
+@media(max-width:820px){.policies{grid-template-columns:1fr}}
+
+footer{padding:36px 0 48px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
+footer a{color:var(--text2)}
+
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="#top" aria-label="WhisperWriter home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="11" y="3" width="10" height="17" rx="5" fill="none" stroke="#00ffc8" stroke-width="2.4"/><path d="M6 15a10 10 0 0 0 20 0M16 25v4M11 29h10" fill="none" stroke="#00ffc8" stroke-width="2.4" stroke-linecap="round"/></svg>
+      WHISPERWRITER
+    </a>
+    <div class="links">
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://github.com/iydebu/whisper-writer">GitHub</a>
+      <a class="btn btn-main" href="#get">Download</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <div class="kicker">Speech to text for Windows</div>
+      <h1>Talk, and it <em>types.</em></h1>
+      <p class="lead">Hold <kbd>F4</kbd>, speak, let go. Your words appear in any app you are using: chat, email, a code editor, a document. It runs fully on your own PC, and it understands Indian English and Hinglish.</p>
+      <div class="cta">
+        <a class="btn btn-main" href="#get">Get the installer <small>pay what you want</small></a>
+        <a class="btn btn-ghost" href="https://github.com/iydebu/whisper-writer">Code on GitHub</a>
+      </div>
+      <p class="fine">Windows 10 / 11 &middot; No cloud, no account, no monthly fee</p>
+    </div>
+
+    <div class="demo" aria-label="Demo: speech being typed into a chat app">
+      <div class="bar"><i></i><i></i><i></i><span>Chat - any app</span></div>
+      <div class="doc">
+        <div class="who">You, typing with your voice</div>
+        <span id="typed"></span><span class="caret"></span>
+      </div>
+      <div class="pill" id="pill"><span class="dot"></span><span id="pilltxt">HOLD F4 TO TALK</span>
+        <span class="wave" id="wave"><b></b><b></b><b></b><b></b><b></b><b></b><b></b></span></div>
+    </div>
+  </div>
+</header>
+
+<section id="how">
+  <div class="wrap">
+    <div class="kicker reveal">How it works</div>
+    <h2 class="reveal">Three steps. No window to switch to.</h2>
+    <div class="steps">
+      <div class="card reveal"><div class="n">01</div><h3>Hold F4</h3><p>Put your cursor anywhere you can type. Hold the F4 key (you can change the key in settings).</p></div>
+      <div class="card reveal"><div class="n">02</div><h3>Speak</h3><p>Talk normally, in English or Hinglish. A small status bar shows that it is listening.</p></div>
+      <div class="card reveal"><div class="n">03</div><h3>Let go</h3><p>Your speech is turned into text on your own PC and typed for you, right where the cursor is.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="features">
+  <div class="wrap">
+    <div class="kicker reveal">Features</div>
+    <h2 class="reveal">Private, fast, and made for Indian voices.</h2>
+    <div class="feats">
+      <div class="feat reveal"><div class="ic">&#9673;</div><div><h3>Runs on your PC</h3><p>Your voice never leaves your computer. No internet needed after install, no account, no subscription.</p></div></div>
+      <div class="feat reveal"><div class="ic">&gt;&gt;</div><div><h3>Fast on NVIDIA GPUs</h3><p>Uses faster-whisper with CUDA, so text appears quickly. It also works on the CPU, just slower.</p></div></div>
+      <div class="feat reveal"><div class="ic">अ</div><div><h3>Indian English and Hinglish</h3><p>Models tuned for Indian accents. Mix Hindi and English freely, get English back, or get Hindi written in English letters.</p></div></div>
+      <div class="feat reveal"><div class="ic">&#8635;</div><div><h3>Five ways to record</h3><p>Hold to talk, press to start and stop, stop on silence, continuous, or say a wake word to start.</p></div></div>
+      <div class="feat reveal"><div class="ic">&#9998;</div><div><h3>Types into any app</h3><p>Works anywhere a cursor blinks: WhatsApp Web, Gmail, Word, VS Code, games chat, and more.</p></div></div>
+      <div class="feat reveal"><div class="ic">&#9881;</div><div><h3>Simple settings</h3><p>A settings window for the key, mode, language and quality, plus two neon themes. Starts with Windows if you want.</p></div></div>
+    </div>
+
+    <table class="modes reveal">
+      <thead><tr><th>Language mode</th><th>You speak</th><th>You get</th></tr></thead>
+      <tbody>
+        <tr><td>Indian English</td><td>English with an Indian accent</td><td>English</td></tr>
+        <tr><td>Hinglish</td><td><i>"kal meeting 5 baje rakh do"</i></td><td>"Keep the meeting at 5 tomorrow."</td></tr>
+        <tr><td>Hinglish Roman</td><td>Hindi or Hinglish</td><td><i>"main theek hoon, tum batao"</i> (no translation)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="get">
+  <div class="wrap">
+    <div class="kicker reveal">Get it</div>
+    <h2 class="reveal">Free code. Easy installer for a small donation.</h2>
+    <p class="lead reveal">All the code is free and open on GitHub. If you want the one-click installer with everything inside, pay what you want. It keeps the project going.</p>
+    <div class="get">
+      <div class="box main reveal">
+        <div class="kicker">Recommended</div>
+        <h3>One-click installer</h3>
+        <div class="price">$3+ <small>pay what you want</small></div>
+        <ul>
+          <li>Main installer (2.5 GB): the app, Hinglish Roman models and the wake word</li>
+          <li>Extra models installer (3 GB, optional): Indian English and Hinglish to English</li>
+          <li>Models already inside. Checks your GPU and sets things up for you</li>
+          <li>Future 1.x updates for the same purchase</li>
+        </ul>
+        <a class="btn btn-main" id="buy" href="https://iydebu.gumroad.com/l/whisperwriter">Support and download</a>
+        <p class="pay">Secure checkout by Gumroad. Cards from any country and PayPal. UPI coming soon.</p>
+      </div>
+      <div class="box reveal">
+        <div class="kicker">Free</div>
+        <h3>Build it yourself</h3>
+        <div class="price">$0</div>
+        <ul>
+          <li>Full source code, MIT license</li>
+          <li>Needs Python, a few commands, and a model download</li>
+          <li>Good if you want to change how it works</li>
+        </ul>
+        <a class="btn btn-ghost" href="https://github.com/iydebu/whisper-writer">View on GitHub</a>
+      </div>
+    </div>
+    <div class="needs reveal">
+      <div><b>Windows</b>10 or 11, 64-bit</div>
+      <div><b>GPU</b>NVIDIA suggested (CPU works)</div>
+      <div><b>Memory</b>8 GB RAM or more</div>
+      <div><b>Disk</b>3 to 9 GB free</div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="kicker reveal">FAQ</div>
+    <h2 class="reveal">Questions</h2>
+    <details class="reveal"><summary>Does it send my voice to the internet?</summary><p>No. The speech models run on your own computer. Your voice and your text stay on your PC.</p></details>
+    <details class="reveal"><summary>Do I need an NVIDIA graphics card?</summary><p>No, but it helps a lot. With an NVIDIA GPU, text appears in about a second. On the CPU it works, but it is slower, especially with the large models.</p></details>
+    <details class="reveal"><summary>Is it a subscription?</summary><p>No. You pay once, any amount from $3. There is no monthly fee and no account.</p></details>
+    <details class="reveal"><summary>Why is the installer so big?</summary><p>The speech models are inside it, so it works offline right after install. The main installer covers Hinglish Roman and the wake word. Install the optional extra models file only if you want the Indian English or Hinglish to English modes.</p></details>
+    <details class="reveal"><summary>Why does Windows show a warning when I run it?</summary><p>The installer is new and not code-signed yet, so Windows SmartScreen may show "Windows protected your PC". Click "More info", then "Run anyway".</p></details>
+    <details class="reveal"><summary>Is there a Mac or Linux version?</summary><p>Not right now. WhisperWriter is for Windows only.</p></details>
+  </div>
+</section>
+
+<section id="policies">
+  <div class="wrap">
+    <div class="kicker reveal">The fine print</div>
+    <h2 class="reveal">Terms, refunds, privacy, contact</h2>
+    <div class="policies">
+      <div class="card reveal" id="terms"><h3>Terms</h3>
+        <p>WhisperWriter is made by Devashish Tiwari (iydebu), an independent developer in Kochi, India. The installer is a digital download. Your payment is a donation that gives you the installer; the source code stays free under the MIT license.</p>
+        <p>The software is provided "as is", without any warranty. Use it at your own risk.</p></div>
+      <div class="card reveal" id="refund"><h3>Refund policy</h3>
+        <p>If the app does not work on your PC, email me within 14 days of buying. I will try to help, and if it still does not work, I will refund you in full.</p>
+        <p>Refunds go back to the same card or account you paid with, usually within 5 to 7 working days.</p></div>
+      <div class="card reveal" id="privacy"><h3>Privacy</h3>
+        <p>The app does not collect, store or send your voice, your text or any usage data. Everything runs on your PC.</p>
+        <p>This website has no tracking. Payments are handled by the payment provider, who shares only your name, email and order details with me so I can deliver the download and help you.</p></div>
+      <div class="card reveal" id="contact"><h3>Contact</h3>
+        <p>Email: <a href="mailto:iydebu.io@gmail.com">iydebu.io@gmail.com</a></p>
+        <p>Devashish Tiwari (iydebu), Kochi, Kerala, India<br><a href="https://iydebu.com">iydebu.com</a> &middot; <a href="https://github.com/iydebu">github.com/iydebu</a></p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Devashish Tiwari (<a href="https://iydebu.com">iydebu</a>)</span>
+    <span><a href="#terms">Terms</a> &middot; <a href="#refund">Refunds</a> &middot; <a href="#privacy">Privacy</a> &middot; <a href="#contact">Contact</a></span>
+  </div>
+</footer>
+
+<script>
+// demo: fake dictation loop
+(() => {
+  const lines = [
+    "Hey, I will reach the office by 10. Start the meeting without me.",
+    "Kal ki meeting 5 baje rakh do, sab ko bata dena.",
+    "Fix the camera bug first, then build for Android.",
+  ];
+  const typed = document.getElementById('typed'), pill = document.getElementById('pill'),
+        txt = document.getElementById('pilltxt'), bars = [...document.querySelectorAll('#wave b')];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) { typed.textContent = lines[0]; return; }
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  let waveT;
+  const wave = on => { clearInterval(waveT); bars.forEach(b => b.style.height = '4px');
+    if (on) waveT = setInterval(() => bars.forEach(b => b.style.height = (4 + Math.random() * 12) + 'px'), 120); };
+  (async function loop(i = 0) {
+    pill.className = 'pill'; txt.textContent = 'HOLD F4 TO TALK'; await sleep(1100);
+    pill.className = 'pill rec'; txt.textContent = 'LISTENING'; wave(true); await sleep(2200);
+    wave(false); pill.className = 'pill work'; txt.textContent = 'TYPING'; await sleep(450);
+    const s = lines[i % lines.length];
+    for (let k = 0; k <= s.length; k++) { typed.textContent = s.slice(0, k); await sleep(18); }
+    pill.className = 'pill'; txt.textContent = 'DONE'; await sleep(2600);
+    typed.textContent = ''; loop(i + 1);
+  })();
+})();
+// reveal on scroll
+(() => {
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+})();
+</script>
+<script src="https://gumroad.com/js/gumroad.js" defer></script>
+</body>
+</html>
