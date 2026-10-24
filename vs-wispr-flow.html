@@ -1,0 +1,197 @@
+<!doctype html>
+<!-- (c) 2026 Devashish Tiwari (iydebu). https://iydebu.com -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>WhisperWriter vs Wispr Flow: an offline Wispr Flow alternative for Windows</title>
+<link rel="canonical" href="https://whisperwriter.iydebu.com/vs-wispr-flow.html">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0d0d0d">
+<meta name="author" content="Devashish Tiwari (iydebu)">
+<meta name="description" content="Looking for a Wispr Flow alternative? WhisperWriter turns speech into text on your own Windows PC: works offline, no account, no weekly word limit, Hinglish to English, one-time price from $3.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="WhisperWriter">
+<meta property="og:title" content="WhisperWriter vs Wispr Flow">
+<meta property="og:description" content="Speech to text that runs on your own Windows PC. Offline, no account, no word limit, pay once from $3.">
+<meta property="og:url" content="https://whisperwriter.iydebu.com/vs-wispr-flow.html">
+<meta property="og:image" content="https://whisperwriter.iydebu.com/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://whisperwriter.iydebu.com/og.png">
+<style>
+:root{
+  --bg:#0d0d0d; --bg2:#141414; --line:#262626;
+  --neon:#00ffc8; --red:#ff0055;
+  --text:#e0e0e0; --text2:#a0a0a0; --muted:#6a6a6a;
+  --mono:"Cascadia Code","JetBrains Mono",Consolas,ui-monospace,monospace;
+  --sans:"Segoe UI",system-ui,-apple-system,sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:17px/1.65 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:var(--neon)}
+.wrap{max-width:1000px;margin:0 auto;padding:0 24px}
+.kicker{font:600 12.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--neon)}
+h1,h2,h3{margin:0;line-height:1.15;letter-spacing:-.01em}
+h2{font-size:clamp(26px,3.6vw,36px);margin:12px 0 14px}
+section{padding:72px 0;border-top:1px solid var(--line)}
+.lead{color:var(--text2);max-width:680px;margin:0}
+
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 24px;border-radius:10px;font:700 15px/1 var(--mono);
+  letter-spacing:.06em;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:transform .2s var(--ease),box-shadow .2s}
+.btn:active{transform:scale(.97)}
+.btn-main{background:var(--neon);color:#00140f}
+.btn-main:hover{box-shadow:0 0 28px rgba(0,255,200,.45);transform:translateY(-2px)}
+.btn-ghost{color:var(--text);border:1.5px solid #3a3a3a;background:transparent}
+.btn-ghost:hover{border-color:var(--neon);color:var(--neon)}
+.btn small{font:500 12px/1 var(--sans);letter-spacing:0;text-transform:none;opacity:.8}
+
+nav{position:sticky;top:0;z-index:5;background:rgba(13,13,13,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:20px;height:60px}
+.logo{display:flex;align-items:center;gap:10px;font:800 16px/1 var(--mono);letter-spacing:.12em;color:var(--neon);text-decoration:none}
+.logo svg{width:26px;height:26px}
+nav .links{margin-left:auto;display:flex;gap:22px;align-items:center}
+nav .links a{color:var(--text2);text-decoration:none;font-size:14.5px}
+nav .links a:hover{color:var(--neon)}
+nav .links a.btn-main,nav .links a.btn-main:hover{color:#00140f}
+nav .links .btn{padding:10px 16px;font-size:13px}
+@media(max-width:720px){nav .links a:not(.btn){display:none}}
+
+.hero{padding:76px 0 64px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:-40% -20% auto;height:600px;
+  background:radial-gradient(closest-side,rgba(0,255,200,.11),transparent 70%);pointer-events:none}
+.hero .wrap{position:relative}
+.hero h1{font-size:clamp(36px,5.6vw,60px);font-weight:800;margin:16px 0 18px;max-width:820px}
+.hero h1 em{font-style:normal;color:var(--neon);text-shadow:0 0 28px rgba(0,255,200,.35)}
+.hero .lead{font-size:19px}
+.cta{display:flex;flex-wrap:wrap;gap:14px;margin:30px 0 0}
+
+.cmp{width:100%;border-collapse:collapse;margin-top:30px;font-size:15.5px}
+.cmp th,.cmp td{text-align:left;padding:14px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.cmp thead th{font:600 12px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.cmp thead th.us{color:var(--neon)}
+.cmp tbody th{font-weight:600;color:var(--text);width:28%}
+.cmp td{color:var(--text2)}
+.cmp td.us{color:var(--text)}
+.cmp td.us b{color:var(--neon);font-weight:600}
+@media(max-width:720px){
+  .cmp thead{display:none}
+  .cmp,.cmp tbody,.cmp tr,.cmp th,.cmp td{display:block;width:auto}
+  .cmp tr{border-bottom:1px solid var(--line);padding:14px 0}
+  .cmp th,.cmp td{border:0;padding:3px 0}
+  .cmp tbody th{width:auto;margin-bottom:4px}
+  .cmp td::before{display:block;font:600 11px/1.6 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);content:attr(data-h)}
+  .cmp td.us::before{color:var(--neon)}
+}
+
+.pick{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:30px}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:24px}
+.card.us{border-color:rgba(0,255,200,.45)}
+.card h3{font-size:19px;margin:0 0 10px}
+.card ul{margin:0;padding-left:20px;color:var(--text2);font-size:15.5px}
+.card li{margin:6px 0}
+@media(max-width:820px){.pick{grid-template-columns:1fr}}
+
+.src{color:var(--muted);font-size:14px;margin:26px 0 0;max-width:760px}
+.src a{color:var(--text2)}
+footer{padding:36px 0 48px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between}
+footer a{color:var(--text2)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="./" aria-label="WhisperWriter home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="11" y="3" width="10" height="17" rx="5" fill="none" stroke="#00ffc8" stroke-width="2.4"/><path d="M6 15a10 10 0 0 0 20 0M16 25v4M11 29h10" fill="none" stroke="#00ffc8" stroke-width="2.4" stroke-linecap="round"/></svg>
+      WHISPERWRITER
+    </a>
+    <div class="links">
+      <a href="./#how">How it works</a>
+      <a href="./#faq">FAQ</a>
+      <a href="https://github.com/iydebu/whisper-writer">GitHub</a>
+      <a class="btn btn-main" href="./#get">Download</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">WhisperWriter vs Wispr Flow</div>
+    <h1>Talk and it types, and your voice <em>stays on your PC.</em></h1>
+    <p class="lead">Wispr Flow is a good dictation app, but it sends your voice to its servers to turn it into text, and the free plan stops at 2,000 words a week. WhisperWriter does the same job on your own Windows PC. It works offline, needs no account, has no word limit, and you pay once, from $3.</p>
+    <div class="cta">
+      <a class="btn btn-main" href="./#get">Get WhisperWriter <small>from $3, once</small></a>
+      <a class="btn btn-ghost" href="https://github.com/iydebu/whisper-writer">Code on GitHub</a>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="kicker">Side by side</div>
+    <h2>How the two apps compare</h2>
+    <table class="cmp">
+      <thead><tr><th></th><th class="us">WhisperWriter</th><th>Wispr Flow</th></tr></thead>
+      <tbody>
+        <tr><th>Where speech becomes text</th><td class="us" data-h="WhisperWriter"><b>On your own PC</b></td><td data-h="Wispr Flow">On Wispr's cloud servers</td></tr>
+        <tr><th>Works without internet</th><td class="us" data-h="WhisperWriter"><b>Yes</b>, after install</td><td data-h="Wispr Flow">No</td></tr>
+        <tr><th>Account</th><td class="us" data-h="WhisperWriter"><b>None</b></td><td data-h="Wispr Flow">Sign-in needed</td></tr>
+        <tr><th>Price</th><td class="us" data-h="WhisperWriter"><b>$3 or more, once</b>. Or build it free from source.</td><td data-h="Wispr Flow">Free plan, or Pro at $15 a month (less if paid yearly)</td></tr>
+        <tr><th>Word limit</th><td class="us" data-h="WhisperWriter"><b>None</b></td><td data-h="Wispr Flow">2,000 words a week on the free desktop plan</td></tr>
+        <tr><th>What it sees</th><td class="us" data-h="WhisperWriter"><b>Only your voice</b>, and nothing leaves your PC</td><td data-h="Wispr Flow">The app name and the text box you type in. "Context Awareness" (can be turned off) also reads text from the open window.</td></tr>
+        <tr><th>Hinglish</th><td class="us" data-h="WhisperWriter">Two modes: Hinglish in English letters, or <b>Hinglish translated to English</b> (extra models file)</td><td data-h="Wispr Flow">Hinglish in English letters (pick it in settings)</td></tr>
+        <tr><th>Languages</th><td class="us" data-h="WhisperWriter">Indian English, Hindi, Hinglish</td><td data-h="Wispr Flow">100+ languages</td></tr>
+        <tr><th>Devices</th><td class="us" data-h="WhisperWriter">Windows 10 and 11</td><td data-h="Wispr Flow">Mac, Windows, iPhone, Android</td></tr>
+        <tr><th>AI clean-up and edit commands</th><td class="us" data-h="WhisperWriter">No. It types what you said.</td><td data-h="Wispr Flow">Yes</td></tr>
+        <tr><th>Hardware</th><td class="us" data-h="WhisperWriter">2.5 GB install. NVIDIA GPU suggested; CPU works, slower.</td><td data-h="Wispr Flow">Any PC with internet; the speech work runs on their servers</td></tr>
+        <tr><th>Source code</th><td class="us" data-h="WhisperWriter"><b>Open</b> (MIT)</td><td data-h="Wispr Flow">Closed</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="kicker">Which one is for you</div>
+    <h2>Pick the one that fits how you work</h2>
+    <div class="pick">
+      <div class="card us"><h3>Pick WhisperWriter if</h3><ul>
+        <li>you use Windows</li>
+        <li>you do not want your voice or your screen sent to anyone</li>
+        <li>you want to say Hinglish and get English back</li>
+        <li>you would rather pay once than every month</li>
+        <li>you dictate a lot and hit word limits</li>
+      </ul></div>
+      <div class="card"><h3>Pick Wispr Flow if</h3><ul>
+        <li>you use a Mac, iPhone or Android phone</li>
+        <li>you speak languages other than English and Hindi</li>
+        <li>you want AI to tidy and reformat your text</li>
+        <li>your PC has no NVIDIA GPU or little disk space</li>
+      </ul></div>
+    </div>
+    <div class="cta">
+      <a class="btn btn-main" href="./#get">Get WhisperWriter <small>from $3, once</small></a>
+      <a class="btn btn-ghost" href="./#faq">Read the FAQ</a>
+    </div>
+    <p class="src">Wispr Flow details were checked on 24 October 2026 on their
+      <a href="https://wisprflow.ai/pricing" rel="nofollow noopener noreferrer">pricing page</a>,
+      <a href="https://wisprflow.ai/data-controls" rel="nofollow noopener noreferrer">data controls page</a>,
+      <a href="https://docs.wisprflow.ai/articles/3191899797-use-flow-with-multiple-languages" rel="nofollow noopener noreferrer">languages guide</a> and
+      <a href="https://docs.wisprflow.ai/articles/3152211871-setup-guide" rel="nofollow noopener noreferrer">setup guide</a>.
+      Their prices and features may have changed since. Wispr Flow is a trademark of Wispr AI, Inc.
+      WhisperWriter is an independent app and is not connected to Wispr.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Devashish Tiwari (<a href="https://iydebu.com">iydebu</a>)</span>
+    <span><a href="./">WhisperWriter home</a> &middot; <a href="./#terms">Terms</a> &middot; <a href="./#privacy">Privacy</a> &middot; <a href="./#contact">Contact</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
